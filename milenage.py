@@ -1,4 +1,7 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+#fra a2b import a2b, rotating ...
+
+
 
 def aes_encrypt(key: bytes, plaintext: bytes) -> bytes:
 
@@ -20,11 +23,12 @@ def rotate_left(data: bytes, n: int) -> bytes:
     return data[n:] + data[:n]
 
 
-# Man trenger et random generert input (trengr man å legge til?)
+# Man trenger et random generert input (trengr man å legge til?) - denne er gitt
 def f0(randomNumber):
     return
 
-class Milenage:
+#rart at den ligger i en class?
+class Milenage: 
 
     def __init__(self, k: bytes, opc: bytes):
         self.k = k
@@ -51,7 +55,7 @@ class Milenage:
         pass
 
 
-# OPerator specific field (OP)
+# OPerator specific field (OP) er gitt fra "operatør" og brukes med en nøkkel for å verifisere abonnementet
 
 # Five integers r1, r2, r3, r4, r5 are defined as follows: (rotation constants)
 

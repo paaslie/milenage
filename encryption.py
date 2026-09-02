@@ -28,8 +28,8 @@ cc = E(K,m)
 
 #cc == xc som bare viser at man ved bruk av K og m får ut riktig xpected cipher
 
-print(b2a(cc))
-print(b2a(xc))
+print(b2a(cc))  # // 9e2980c5 9739da67 b136355e 3cede6a2
+print(b2a(xc)) # // 9e2980c5 9739da67 b136355e 3cede6a2
 
-print(cc)
+print(cc)  # //b'\x9e)\x80\xc5\x979\xdag\xb165^<\xed\xe6\xa2'
 

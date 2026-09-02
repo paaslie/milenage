@@ -1,33 +1,30 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
-# =====================================================
 # Hjelpefunksjoner
-# =====================================================
+# Hjelpefunksjoner ligger i en annen mappe FORETRUKKENT) Så encryption.py er overflødig nå.
 
-def aes_encrypt(key: bytes, plaintext: bytes) -> bytes:
+def aes_encrypt(key: bytes, plaintext: bytes) -> bytes: # AES kryptering
     cipher = Cipher(algorithms.AES(key), modes.ECB())
     encryptor = cipher.encryptor()
     return encryptor.update(plaintext) + encryptor.finalize()
 
 
-def xor_bytes(a: bytes, b: bytes) -> bytes:
+def xor_bytes(a: bytes, b: bytes) -> bytes: #XOR
     return bytes(x ^ y for x, y in zip(a, b))
 
 
-def rotate_left(data: bytes, n: int) -> bytes:
+def rotate_left(data: bytes, n: int) -> bytes: #Rotating
     return data[n:] + data[:n]
 
 
-def compute_opc(k: bytes, op: bytes) -> bytes:
+def compute_opc(k: bytes, op: bytes) -> bytes: #AES kryptering
     """
     OPc = AES(K, OP) XOR OP
     """
-    return xor_bytes(aes_encrypt(k, op), op)
+    return xor_bytes(aes_encrypt(k, op), op) #bruker xor_bytes med: K, OP
 
 
-# =====================================================
-# Rotasjonskonstanter
-# =====================================================
+# Rotasjonskonstanter og c
 
 r1 = 8      # 64 bit
 r2 = 0      # 0 bit
@@ -35,32 +32,29 @@ r3 = 4      # 32 bit
 r4 = 8      # 64 bit
 r5 = 12     # 96 bit
 
-
-# =====================================================
-# Milenage
-# =====================================================
-
 c1 = bytes.fromhex("00000000000000000000000000000000")
 c2 = bytes.fromhex("00000000000000000000000000000001")
 c3 = bytes.fromhex("00000000000000000000000000000002")
 c4 = bytes.fromhex("00000000000000000000000000000004")
 c5 = bytes.fromhex("00000000000000000000000000000008")
 
+# Milenage seksjonen
 class Milenage:
 
+#OPC
     def __init__(self, k: bytes, opc: bytes):
         self.k = k
         self.opc = opc
 
+#AES krypteringen og XOR gjenbrukt
     def _temp(self, rand: bytes) -> bytes:
         return aes_encrypt(
             self.k,
             xor_bytes(rand, self.opc)
         )
 
-    # -------------------------------------------------
+
     # f1 -> MAC-A
-    # -------------------------------------------------
 
     def f1(self, rand: bytes, sqn: bytes, amf: bytes) -> bytes:
 
@@ -132,14 +126,8 @@ class Milenage:
           
           out = aes_encrypt(self.k, inp)  
            
-
           ik = xor_bytes(out, self.opc)
-          print("STEP5 =", ik.hex())
-          print("STEP1 =", inp.hex())
-          print("STEP2 =", rotate_left(inp, r5).hex())
-          print("STEP3 =", xor_bytes(rotate_left(inp, r4), c4).hex())
-          print("STEP4 =", out.hex())
-          print("STEP5 =", xor_bytes(out, self.opc).hex())         
+                
 
           return ik
 
@@ -161,21 +149,15 @@ class Milenage:
 
         ak = xor_bytes(out, self.opc)[:6]
 
-        print("STEP1 =", temp.hex())
-        print("STEP2 =", inp.hex())
-        print("STEP3 =", inp.hex())
-        print("STEP4 =", out.hex())
-        print("STEP5 =", ak.hex())
-        return ak[:6]
-        result = xor_bytes(out, self.opc)
-
-        
         return ak
 
-# =====================================================
+"""
+MAngler 1* og 5* funksjoner
+"""
+        
 # Test mot in1.py
-# =====================================================
-#her ligger testdataene
+
+# Per nå her ligger testdataene
 
 if __name__ == "__main__":
 
