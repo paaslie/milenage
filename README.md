@@ -20,3 +20,9 @@ for å skape forskjellige input til nye AES-kall.
 
 Konseptuelt kan milenage viser ved disse stegene:
 
+
+Spørsmål:
+Hvordan dokumenterer man bruk av KI? Er et noen begrensninger 
+
+Hvordan skal man referere til dokumentasjonen? Hvordan dokumenterer man og hva er cirka nok?
+

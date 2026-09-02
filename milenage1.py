@@ -84,11 +84,15 @@ class Milenage:
 
         temp = self._temp(rand)
 
-        out = xor_bytes(temp, self.opc)
+        inp = xor_bytes(temp, self.opc)
+        inp = rotate_left(inp, r2)
+        inp = xor_bytes(inp, c2)
 
-        res = out[8:16]
+        out = aes_encrypt(self.k, inp)
+        result = xor_bytes(out, self.opc)
 
-        return res
+
+        return result[8:16]
 
     # -------------------------------------------------
     # f3 -> CK
